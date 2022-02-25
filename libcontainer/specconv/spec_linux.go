@@ -255,6 +255,8 @@ func CreateLibcontainerConfig(opts *CreateOpts) (*configs.Config, error) {
 		return nil, err
 	}
 
+	// TODO look into this here and below for tracing where the group is made/changed.
+
 	config.Cgroups = c
 	// set linux-specific config
 	if spec.Linux != nil {
@@ -453,6 +455,7 @@ func CreateCgroupConfig(opts *CreateOpts, defaultDevs []*devices.Device) (*confi
 			myCgroupPath = libcontainerUtils.CleanPath(spec.Linux.CgroupsPath)
 		}
 	}
+	logrus.Info("CreateCgroupConfig set myCgroupPath to %s\n", myCgroupPath)
 
 	if useSystemdCgroup {
 		if myCgroupPath == "" {
@@ -476,6 +479,7 @@ func CreateCgroupConfig(opts *CreateOpts, defaultDevs []*devices.Device) (*confi
 		}
 		c.Path = myCgroupPath
 	}
+	logrus.Info("CreateCgroupConfig path=%s; parent=%s; scopePrefix=%s, name=%s\n", c.Path, c.Parent, c.ScopePrefix, c.Name)
 
 	// In rootless containers, any attempt to make cgroup changes is likely to fail.
 	// libcontainer will validate this but ignores the error.

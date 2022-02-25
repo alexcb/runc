@@ -5,6 +5,7 @@ package main
 import (
 	"os"
 
+	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
 )
 
@@ -73,6 +74,7 @@ command(s) that get executed on start, edit the args parameter of the spec. See
 		if err != nil {
 			return err
 		}
+		logrus.Infof("in runCommand: setupSpec returned %v\n", spec)
 		status, err := startContainer(context, spec, CT_ACT_RUN, nil)
 		if err == nil {
 			// exit with the container's exit status so any external supervisor is

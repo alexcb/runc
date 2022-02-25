@@ -399,7 +399,7 @@ const (
 )
 
 func startContainer(context *cli.Context, spec *specs.Spec, action CtAct, criuOpts *libcontainer.CriuOpts) (int, error) {
-	logrus.Info("ACB in startContainer")
+	logrus.Info("ACB in startContainer; cgroupsPath is %s", spec.Linux.CgroupsPath)
 	id := context.Args().First()
 	if id == "" {
 		return -1, errEmptyID
