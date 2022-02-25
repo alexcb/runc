@@ -259,30 +259,30 @@ func (c *linuxContainer) Start(process *Process) error {
 		return newGenericError(errors.New("can't start container with SkipDevices set"), ConfigInvalid)
 	}
 	if process.Init {
-		logrus.Infof("ACB process.Init before; sleeping for 30")
-		time.Sleep(time.Second * 30)
+		//logrus.Infof("ACB process.Init before; sleeping for 30")
+		//time.Sleep(time.Second * 30)
 		if err := c.createExecFifo(); err != nil {
 			return err
 		}
-		logrus.Infof("ACB process.Init done; sleeping for 30")
-		time.Sleep(time.Second * 30)
+		//logrus.Infof("ACB process.Init done; sleeping for 30")
+		//time.Sleep(time.Second * 30)
 	}
-	logrus.Infof("ACB c.start before; sleeping for 30")
-	time.Sleep(time.Second * 30)
+	//logrus.Infof("ACB c.start before; sleeping for 30")
+	//time.Sleep(time.Second * 30)
 	if err := c.start(process); err != nil {
 		if process.Init {
 			c.deleteExecFifo()
 		}
 		return err
 	}
-	logrus.Infof("ACB linuxContainer.Start returning nil sleeping for 30sec") // FAILS here
-	time.Sleep(time.Second * 30)
+	//logrus.Infof("ACB linuxContainer.Start returning nil sleeping for 30sec") // FAILS here
+	//time.Sleep(time.Second * 30)
 	return nil
 }
 
 func (c *linuxContainer) Run(process *Process) error {
-	logrus.Infof("ACB linuxContainer.Run with %v; %v; sleeping for 30sec", c, process)
-	time.Sleep(time.Second * 30)
+	//logrus.Infof("ACB linuxContainer.Run with %v; %v; sleeping for 30sec", c, process)
+	//time.Sleep(time.Second * 30)
 	if err := c.Start(process); err != nil {
 		return err
 	}
@@ -293,8 +293,8 @@ func (c *linuxContainer) Run(process *Process) error {
 }
 
 func (c *linuxContainer) Exec() error {
-	logrus.Infof("ACB linuxContainer.Exec with %v; sleeping for 30sec", c)
-	time.Sleep(time.Second * 30)
+	//logrus.Infof("ACB linuxContainer.Exec with %v; sleeping for 30sec", c)
+	//time.Sleep(time.Second * 30)
 	c.m.Lock()
 	defer c.m.Unlock()
 	return c.exec()
@@ -390,14 +390,14 @@ func (c *linuxContainer) start(process *Process) (retErr error) {
 		}()
 	}
 
-	logrus.Infof("ACB parent.start() before; sleeping for 30")
+	logrus.Infof("ACB parent.start() before (this works); sleeping for 30") // works
 	time.Sleep(time.Second * 30)
 
 	if err := parent.start(); err != nil {
 		return newSystemErrorWithCause(err, "starting container process")
 	}
 
-	logrus.Infof("ACB parent.start() after; sleeping for 30")
+	logrus.Infof("ACB parent.start() (this fails) after; sleeping for 30") // fails
 	time.Sleep(time.Second * 30)
 
 	if process.Init {

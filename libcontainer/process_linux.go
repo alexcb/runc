@@ -88,6 +88,7 @@ func (p *setnsProcess) signal(sig os.Signal) error {
 }
 
 func (p *setnsProcess) start() (retErr error) {
+	logrus.Infof("in setnsProcess.start()")
 	defer p.messageSockPair.parent.Close()
 	// get the "before" value of oom kill count
 	oom, _ := p.manager.OOMKillCount()
@@ -327,6 +328,8 @@ func (p *initProcess) waitForChildExit(childPid int) error {
 }
 
 func (p *initProcess) start() (retErr error) {
+	logrus.Infof("in initProcess.start(); sleeping 30sec")
+	time.Sleep(time.Second * 30)
 	defer p.messageSockPair.parent.Close() //nolint: errcheck
 	err := p.cmd.Start()
 	p.process.ops = p
