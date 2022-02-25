@@ -222,7 +222,7 @@ func createPidFile(path string, process *libcontainer.Process) error {
 }
 
 func createContainer(context *cli.Context, id string, spec *specs.Spec) (libcontainer.Container, error) {
-	logrus.Info("ACB in createContainer")
+	logrus.Infof("ACB in createContainer")
 	rootlessCg, err := shouldUseRootlessCgroupManager(context)
 	if err != nil {
 		return nil, err
@@ -399,7 +399,7 @@ const (
 )
 
 func startContainer(context *cli.Context, spec *specs.Spec, action CtAct, criuOpts *libcontainer.CriuOpts) (int, error) {
-	logrus.Info("ACB in startContainer; cgroupsPath is %s", spec.Linux.CgroupsPath)
+	logrus.Infof("ACB in startContainer; cgroupsPath is %s", spec.Linux.CgroupsPath)
 	id := context.Args().First()
 	if id == "" {
 		return -1, errEmptyID

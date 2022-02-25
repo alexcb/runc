@@ -479,7 +479,7 @@ func CreateCgroupConfig(opts *CreateOpts, defaultDevs []*devices.Device) (*confi
 		}
 		c.Path = myCgroupPath
 	}
-	logrus.Info("CreateCgroupConfig path=%s; parent=%s; scopePrefix=%s, name=%s\n", c.Path, c.Parent, c.ScopePrefix, c.Name)
+	logrus.Infof("CreateCgroupConfig path=%s; parent=%s; scopePrefix=%s, name=%s\n", c.Path, c.Parent, c.ScopePrefix, c.Name)
 
 	// In rootless containers, any attempt to make cgroup changes is likely to fail.
 	// libcontainer will validate this but ignores the error.
