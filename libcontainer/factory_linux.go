@@ -10,7 +10,6 @@ import (
 	"regexp"
 	"runtime/debug"
 	"strconv"
-	"time"
 
 	securejoin "github.com/cyphar/filepath-securejoin"
 	"github.com/moby/sys/mountinfo"
@@ -300,9 +299,9 @@ func (l *LinuxFactory) Create(id string, config *configs.Config) (Container, err
 	}
 	c.state = &stoppedState{c: c}
 
-	logrus.Infof("pause here for 30sec!; can you stat?")
-	time.Sleep(time.Second * 30)
-	logrus.Infof("pause here for 30sec done after create done!")
+	//logrus.Infof("pause here for 30sec!; can you stat?")
+	//time.Sleep(time.Second * 30)
+	//logrus.Infof("pause here for 30sec done after create done!")
 	return c, nil
 }
 

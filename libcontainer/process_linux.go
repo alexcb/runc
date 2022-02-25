@@ -328,7 +328,7 @@ func (p *initProcess) waitForChildExit(childPid int) error {
 }
 
 func (p *initProcess) start() (retErr error) {
-	logrus.Infof("in initProcess.start(); sleeping 30sec")
+	logrus.Infof("in initProcess.start(); sleeping 30sec") // works here
 	time.Sleep(time.Second * 30)
 	defer p.messageSockPair.parent.Close() //nolint: errcheck
 	err := p.cmd.Start()
@@ -340,6 +340,9 @@ func (p *initProcess) start() (retErr error) {
 		p.process.ops = nil
 		return newSystemErrorWithCause(err, "starting init process command")
 	}
+
+	logrus.Infof("in initProcess.start() step 2; sleeping 30sec")
+	time.Sleep(time.Second * 30)
 
 	waitInit := initWaiter(p.messageSockPair.parent)
 	defer func() {
@@ -387,6 +390,10 @@ func (p *initProcess) start() (retErr error) {
 	if err := p.manager.Apply(p.pid()); err != nil {
 		return newSystemErrorWithCause(err, "applying cgroup configuration for process")
 	}
+
+	logrus.Infof("in initProcess.start() step 3; sleeping 30sec")
+	time.Sleep(time.Second * 30)
+
 	if p.intelRdtManager != nil {
 		if err := p.intelRdtManager.Apply(p.pid()); err != nil {
 			return newSystemErrorWithCause(err, "applying Intel RDT configuration for process")
@@ -399,6 +406,8 @@ func (p *initProcess) start() (retErr error) {
 	if err != nil {
 		return err
 	}
+	logrus.Infof("in initProcess.start() step 4; sleeping 30sec")
+	time.Sleep(time.Second * 30)
 
 	childPid, err := p.getChildPid()
 	if err != nil {
@@ -413,6 +422,9 @@ func (p *initProcess) start() (retErr error) {
 		return newSystemErrorWithCausef(err, "getting pipe fds for pid %d", childPid)
 	}
 	p.setExternalDescriptors(fds)
+
+	logrus.Infof("in initProcess.start() step 5; sleeping 30sec")
+	time.Sleep(time.Second * 30)
 
 	// Now it's time to setup cgroup namesapce
 	if p.config.Config.Namespaces.Contains(configs.NEWCGROUP) && p.config.Config.Namespaces.PathOf(configs.NEWCGROUP) == "" {
@@ -439,6 +451,9 @@ func (p *initProcess) start() (retErr error) {
 		sentRun    bool
 		sentResume bool
 	)
+
+	logrus.Infof("in initProcess.start() step 6; sleeping 30sec")
+	time.Sleep(time.Second * 30)
 
 	ierr := parseSync(p.messageSockPair.parent, func(sync *syncT) error {
 		switch sync.Type {
@@ -543,6 +558,9 @@ func (p *initProcess) start() (retErr error) {
 
 		return nil
 	})
+
+	logrus.Infof("in initProcess.start() step 7; sleeping 30sec")
+	time.Sleep(time.Second * 30)
 
 	if !sentRun {
 		return newSystemErrorWithCause(ierr, "container init")
