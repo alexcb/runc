@@ -22,6 +22,7 @@ import (
 	"github.com/opencontainers/runc/libcontainer/intelrdt"
 	"github.com/opencontainers/runc/libcontainer/utils"
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 
 	"golang.org/x/sys/unix"
 )
@@ -245,6 +246,7 @@ type LinuxFactory struct {
 }
 
 func (l *LinuxFactory) Create(id string, config *configs.Config) (Container, error) {
+	logrus.Infof("ACB LinuxFactory.Create %s %v\n", id, config)
 	if l.Root == "" {
 		return nil, newGenericError(fmt.Errorf("invalid root"), ConfigInvalid)
 	}

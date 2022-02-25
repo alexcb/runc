@@ -508,6 +508,7 @@ func CreateCgroupConfig(opts *CreateOpts, defaultDevs []*devices.Device) (*confi
 				if err != nil {
 					return nil, err
 				}
+				logrus.Infof("ACB stringToCgroupDeviceRune(%s) -> %v; access: %v; allow: %v\n", t, dt, d.Access, d.Allow)
 				c.Resources.Devices = append(c.Resources.Devices, &devices.Rule{
 					Type:        dt,
 					Major:       major,
