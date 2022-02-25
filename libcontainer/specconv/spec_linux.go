@@ -646,9 +646,12 @@ func CreateCgroupConfig(opts *CreateOpts, defaultDevs []*devices.Device) (*confi
 	for _, device := range defaultDevs {
 		c.Resources.Devices = append(c.Resources.Devices, &device.Rule)
 	}
-	logrus.Infof("pause here for 30sec!; can you stat %s?", c.Path)
-	time.Sleep(time.Second * 30)
-	logrus.Infof("pause here for 30sec done!")
+
+	// ACB cgroups don't get setup yet, so the cgroup test cat program still works at this point
+
+	//logrus.Infof("pause here for 30sec!; can you stat %s?", c.Path)
+	//time.Sleep(time.Second * 30)
+	//logrus.Infof("pause here for 30sec done!")
 	return c, nil
 }
 

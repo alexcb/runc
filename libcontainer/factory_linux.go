@@ -10,6 +10,7 @@ import (
 	"regexp"
 	"runtime/debug"
 	"strconv"
+	"time"
 
 	securejoin "github.com/cyphar/filepath-securejoin"
 	"github.com/moby/sys/mountinfo"
@@ -265,12 +266,27 @@ func (l *LinuxFactory) Create(id string, config *configs.Config) (Container, err
 	} else if !os.IsNotExist(err) {
 		return nil, newGenericError(err, SystemError)
 	}
+
+	logrus.Infof("pause here for 30sec!; can you stat %s?", containerRoot)
+	time.Sleep(time.Second * 30)
+	logrus.Infof("pause here for 30sec done!")
+
 	if err := os.MkdirAll(containerRoot, 0o711); err != nil {
 		return nil, newGenericError(err, SystemError)
 	}
+
+	logrus.Infof("pause here for 30sec!; mkdirAll finished, can you stat %s?", containerRoot)
+	time.Sleep(time.Second * 30)
+	logrus.Infof("pause here for 30sec done!")
+
 	if err := os.Chown(containerRoot, unix.Geteuid(), unix.Getegid()); err != nil {
 		return nil, newGenericError(err, SystemError)
 	}
+
+	logrus.Infof("pause here for 30sec!; chown to %v %v finished, can you stat %s?", unix.Geteuid(), unix.Getegid(), containerRoot)
+	time.Sleep(time.Second * 30)
+	logrus.Infof("pause here for 30sec done!")
+
 	c := &linuxContainer{
 		id:            id,
 		root:          containerRoot,
