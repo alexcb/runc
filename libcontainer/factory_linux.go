@@ -267,7 +267,7 @@ func (l *LinuxFactory) Create(id string, config *configs.Config) (Container, err
 		return nil, newGenericError(err, SystemError)
 	}
 
-	logrus.Infof("pause here for 30sec!; can you stat %s?", containerRoot)
+	logrus.Infof("pause here for 30sec before mkdirall; can you stat %s?", containerRoot)
 	time.Sleep(time.Second * 30)
 	logrus.Infof("pause here for 30sec done!")
 
