@@ -251,6 +251,8 @@ func (c *linuxContainer) Set(config configs.Config) error {
 }
 
 func (c *linuxContainer) Start(process *Process) error {
+	logrus.Infof("ACB linuxContainer.Start with %v; %v; sleeping for 30sec", c, process)
+	time.Sleep(time.Second * 30)
 	c.m.Lock()
 	defer c.m.Unlock()
 	if c.config.Cgroups.Resources.SkipDevices {
@@ -267,10 +269,14 @@ func (c *linuxContainer) Start(process *Process) error {
 		}
 		return err
 	}
+	logrus.Infof("ACB linuxContainer.Start returning nil sleeping for 30sec")
+	time.Sleep(time.Second * 30)
 	return nil
 }
 
 func (c *linuxContainer) Run(process *Process) error {
+	logrus.Infof("ACB linuxContainer.Run with %v; %v; sleeping for 30sec", c, process)
+	time.Sleep(time.Second * 30)
 	if err := c.Start(process); err != nil {
 		return err
 	}
@@ -281,6 +287,8 @@ func (c *linuxContainer) Run(process *Process) error {
 }
 
 func (c *linuxContainer) Exec() error {
+	logrus.Infof("ACB linuxContainer.Exec with %v; sleeping for 30sec", c)
+	time.Sleep(time.Second * 30)
 	c.m.Lock()
 	defer c.m.Unlock()
 	return c.exec()

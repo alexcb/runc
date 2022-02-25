@@ -267,25 +267,22 @@ func (l *LinuxFactory) Create(id string, config *configs.Config) (Container, err
 		return nil, newGenericError(err, SystemError)
 	}
 
-	logrus.Infof("pause here for 30sec before mkdirall; can you stat %s?", containerRoot)
-	time.Sleep(time.Second * 30)
-	logrus.Infof("pause here for 30sec done!")
+	//logrus.Infof("pause here for 30sec before mkdirall; can you stat %s?", containerRoot)
+	//time.Sleep(time.Second * 30)
+	//logrus.Infof("pause here for 30sec done!")
 
+	//containerRoot is /run/runc/wxaxpdh1nwxk47mqni46uenj2
 	if err := os.MkdirAll(containerRoot, 0o711); err != nil {
 		return nil, newGenericError(err, SystemError)
 	}
 
-	logrus.Infof("pause here for 30sec!; mkdirAll finished, can you stat %s?", containerRoot)
-	time.Sleep(time.Second * 30)
-	logrus.Infof("pause here for 30sec done!")
+	//logrus.Infof("pause here for 30sec!; mkdirAll finished, can you stat %s?", containerRoot)
+	//time.Sleep(time.Second * 30)
+	//logrus.Infof("pause here for 30sec done!")
 
 	if err := os.Chown(containerRoot, unix.Geteuid(), unix.Getegid()); err != nil {
 		return nil, newGenericError(err, SystemError)
 	}
-
-	logrus.Infof("pause here for 30sec!; chown to %v %v finished, can you stat %s?", unix.Geteuid(), unix.Getegid(), containerRoot)
-	time.Sleep(time.Second * 30)
-	logrus.Infof("pause here for 30sec done!")
 
 	c := &linuxContainer{
 		id:            id,
@@ -302,6 +299,10 @@ func (l *LinuxFactory) Create(id string, config *configs.Config) (Container, err
 		c.intelRdtManager = l.NewIntelRdtManager(config, id, "")
 	}
 	c.state = &stoppedState{c: c}
+
+	logrus.Infof("pause here for 30sec!; can you stat?")
+	time.Sleep(time.Second * 30)
+	logrus.Infof("pause here for 30sec done after create done!")
 	return c, nil
 }
 

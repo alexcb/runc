@@ -308,6 +308,7 @@ func (r *runner) run(config *specs.Process) (int, error) {
 	}
 	defer tty.Close()
 
+	logrus.Infof("ACB runner.run with %v\n", r.action)
 	switch r.action {
 	case CT_ACT_CREATE:
 		err = r.container.Start(process)
