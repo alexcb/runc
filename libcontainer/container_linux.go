@@ -251,25 +251,31 @@ func (c *linuxContainer) Set(config configs.Config) error {
 }
 
 func (c *linuxContainer) Start(process *Process) error {
-	logrus.Infof("ACB linuxContainer.Start with %v; %v; sleeping for 30sec", c, process)
-	time.Sleep(time.Second * 30)
+	logrus.Infof("ACB linuxContainer.Start with %v; %v", c, process) // WORKS HERE
+	//time.Sleep(time.Second * 30)
 	c.m.Lock()
 	defer c.m.Unlock()
 	if c.config.Cgroups.Resources.SkipDevices {
 		return newGenericError(errors.New("can't start container with SkipDevices set"), ConfigInvalid)
 	}
 	if process.Init {
+		logrus.Infof("ACB process.Init before; sleeping for 30")
+		time.Sleep(time.Second * 30)
 		if err := c.createExecFifo(); err != nil {
 			return err
 		}
+		logrus.Infof("ACB process.Init done; sleeping for 30")
+		time.Sleep(time.Second * 30)
 	}
+	logrus.Infof("ACB c.start before; sleeping for 30")
+	time.Sleep(time.Second * 30)
 	if err := c.start(process); err != nil {
 		if process.Init {
 			c.deleteExecFifo()
 		}
 		return err
 	}
-	logrus.Infof("ACB linuxContainer.Start returning nil sleeping for 30sec")
+	logrus.Infof("ACB linuxContainer.Start returning nil sleeping for 30sec") // FAILS here
 	time.Sleep(time.Second * 30)
 	return nil
 }
@@ -384,9 +390,15 @@ func (c *linuxContainer) start(process *Process) (retErr error) {
 		}()
 	}
 
+	logrus.Infof("ACB parent.start() before; sleeping for 30")
+	time.Sleep(time.Second * 30)
+
 	if err := parent.start(); err != nil {
 		return newSystemErrorWithCause(err, "starting container process")
 	}
+
+	logrus.Infof("ACB parent.start() after; sleeping for 30")
+	time.Sleep(time.Second * 30)
 
 	if process.Init {
 		c.fifo.Close()
