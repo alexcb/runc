@@ -51,6 +51,9 @@ value for "bundle" is the current directory.`
 )
 
 func main() {
+	if _, ok := os.LookupEnv("ACB"); ok {
+		fmt.Printf("ACB HERE\n")
+	}
 	app := cli.NewApp()
 	app.Name = "runc"
 	app.Usage = usage
@@ -185,7 +188,7 @@ func createLogConfig(context *cli.Context) logs.Config {
 	}
 	config := logs.Config{
 		LogPipeFd:   logPipeFd,
-		LogLevel:    logrus.InfoLevel,
+		LogLevel:    logrus.DebugLevel,
 		LogFilePath: logFilePath,
 		LogFormat:   context.GlobalString("log-format"),
 		LogCaller:   context.GlobalBool("debug"),

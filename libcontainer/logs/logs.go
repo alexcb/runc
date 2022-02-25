@@ -101,6 +101,7 @@ func ConfigureLogging(config Config) error {
 		return fmt.Errorf("unknown log-format %q", config.LogFormat)
 	}
 
+	logrus.Info("ACB loghack")
 	loggingConfigured = true
 	return nil
 }
