@@ -96,7 +96,7 @@ func CreateCgroupPath(path string, c *configs.Cgroup) (Err error) {
 		current = filepath.Join(current, e)
 		if i > 0 {
 			logrus.Infof("ACB mkdir %s (before)", current)
-			time.Sleep(time.Second * 30)
+			time.Sleep(time.Second * 20)
 			if err := os.Mkdir(current, 0o755); err != nil {
 				logrus.Infof("ACB mkdir %s failed: %v", current, err)
 				if !os.IsExist(err) {
@@ -116,6 +116,7 @@ func CreateCgroupPath(path string, c *configs.Cgroup) (Err error) {
 			cgType, _ := cgroups.ReadFile(current, cgTypeFile)
 			cgType = strings.TrimSpace(cgType)
 			logrus.Infof("ACB got cgType %s", cgType)
+			time.Sleep(time.Second * 20)
 			switch cgType {
 			// If the cgroup is in an invalid mode (usually this means there's an internal
 			// process in the cgroup tree, because we created a cgroup under an
@@ -131,6 +132,7 @@ func CreateCgroupPath(path string, c *configs.Cgroup) (Err error) {
 					// since that means we're a properly delegated cgroup subtree) but in
 					// this case there's not much we can do and it's better than giving an
 					// error.
+					logrus.Infof("ACB cgroups.WriteFile %s %s -> threaded", current, cgTypeFile)
 					_ = cgroups.WriteFile(current, cgTypeFile, "threaded")
 				}
 			// If the cgroup is in (threaded) or (domain threaded) mode, we can only use thread-aware controllers
@@ -150,17 +152,17 @@ func CreateCgroupPath(path string, c *configs.Cgroup) (Err error) {
 		// enable all supported controllers
 		if i < len(elements)-1 {
 			logrus.Infof("ACB writing %s %s %s (before)", current, cgStCtlFile, res)
-			time.Sleep(time.Second * 10)
+			//time.Sleep(time.Second * 10)
 			if err := cgroups.WriteFile(current, cgStCtlFile, res); err != nil {
 				logrus.Infof("ACB writing failed %v", err)
 				// try write one by one
 				allCtrs := strings.Split(res, " ")
 				for _, ctr := range allCtrs {
-					logrus.Infof("ACB writing %s %s %s (before)", current, cgStCtlFile, ctr)
-					time.Sleep(time.Second * 10)
+					//logrus.Infof("ACB writing %s %s %s (before)", current, cgStCtlFile, ctr)
+					//time.Sleep(time.Second * 10)
 					_ = cgroups.WriteFile(current, cgStCtlFile, ctr)
-					logrus.Infof("ACB writing %s %s %s (after)", current, cgStCtlFile, ctr)
-					time.Sleep(time.Second * 10)
+					//logrus.Infof("ACB writing %s %s %s (after)", current, cgStCtlFile, ctr)
+					//time.Sleep(time.Second * 10)
 				}
 			}
 			// Some controllers might not be enabled when rootless or containerized,
