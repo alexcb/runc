@@ -69,13 +69,15 @@ func (m *manager) getControllers() error {
 }
 
 func (m *manager) Apply(pid int) error {
-	logrus.Info("ACB fs2.Apply called\n")
+	logrus.Info("ACB fs2.Apply called %v -> %v", m.dirPath, m.config)
 	if err := CreateCgroupPath(m.dirPath, m.config); err != nil {
+		logrus.Infof("ACB Apply failed")
 		// Related tests:
 		// - "runc create (no limits + no cgrouppath + no permission) succeeds"
 		// - "runc create (rootless + no limits + cgrouppath + no permission) fails with permission error"
 		// - "runc create (rootless + limits + no cgrouppath + no permission) fails with informative error"
 		if m.rootless {
+			logrus.Infof("ACB rootless")
 			if m.config.Path == "" {
 				if blNeed, nErr := needAnyControllers(m.config.Resources); nErr == nil && !blNeed {
 					return nil
@@ -85,9 +87,12 @@ func (m *manager) Apply(pid int) error {
 		}
 		return err
 	}
+	logrus.Infof("ACB write cgroup proc %v to %v", pid, m.dirPath)
 	if err := cgroups.WriteCgroupProc(m.dirPath, pid); err != nil {
+		logrus.Infof("fail %v", err)
 		return err
 	}
+	logrus.Infof("OK!")
 	return nil
 }
 

@@ -8,6 +8,7 @@ import (
 
 	"github.com/opencontainers/runc/libcontainer/cgroups"
 	"github.com/opencontainers/runc/libcontainer/configs"
+	"github.com/sirupsen/logrus"
 )
 
 func supportedControllers() (string, error) {
@@ -70,6 +71,7 @@ func containsDomainController(r *configs.Resources) bool {
 
 // CreateCgroupPath creates cgroupv2 path, enabling all the supported controllers.
 func CreateCgroupPath(path string, c *configs.Cgroup) (Err error) {
+	logrus.Infof("ACB CreateCgroupPath %s -> %v", path, c)
 	if !strings.HasPrefix(path, UnifiedMountpoint) {
 		return fmt.Errorf("invalid cgroup path %s", path)
 	}
@@ -92,6 +94,7 @@ func CreateCgroupPath(path string, c *configs.Cgroup) (Err error) {
 	for i, e := range elements {
 		current = filepath.Join(current, e)
 		if i > 0 {
+			logrus.Infof("ACB mkdir %s", current)
 			if err := os.Mkdir(current, 0o755); err != nil {
 				if !os.IsExist(err) {
 					return err
