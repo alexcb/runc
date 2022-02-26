@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/opencontainers/runc/libcontainer/cgroups"
 	"github.com/opencontainers/runc/libcontainer/configs"
@@ -94,8 +95,10 @@ func CreateCgroupPath(path string, c *configs.Cgroup) (Err error) {
 	for i, e := range elements {
 		current = filepath.Join(current, e)
 		if i > 0 {
-			logrus.Infof("ACB mkdir %s", current)
+			logrus.Infof("ACB mkdir %s (before)", current)
+			time.Sleep(time.Second * 30)
 			if err := os.Mkdir(current, 0o755); err != nil {
+				logrus.Infof("ACB mkdir %s failed: %v", current, err)
 				if !os.IsExist(err) {
 					return err
 				}
@@ -104,10 +107,15 @@ func CreateCgroupPath(path string, c *configs.Cgroup) (Err error) {
 				current := current
 				defer func() {
 					if Err != nil {
+						logrus.Infof("ACB removing %s", current)
 						os.Remove(current)
 					}
 				}()
 			}
+
+			logrus.Infof("ACB mkdir %s (before)", current)
+			time.Sleep(time.Second * 30)
+
 			cgType, _ := cgroups.ReadFile(current, cgTypeFile)
 			cgType = strings.TrimSpace(cgType)
 			switch cgType {
