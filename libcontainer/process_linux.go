@@ -384,17 +384,18 @@ func (p *initProcess) start() (retErr error) {
 		}
 	}()
 
-	logrus.Infof("in initProcess.start() step a; sleeping 30sec") // works here
-	time.Sleep(time.Second * 30)
+	logrus.Infof("p.manager.Apply(p.pid()) before works!") // works here
+	//time.Sleep(time.Second * 30)
 
 	// Do this before syncing with child so that no children can escape the
 	// cgroup. We don't need to worry about not doing this and not being root
 	// because we'd be using the rootless cgroup manager in that case.
 	if err := p.manager.Apply(p.pid()); err != nil {
+		logrus.Errorf("p.manager.Apply failed %v", err)
 		return newSystemErrorWithCause(err, "applying cgroup configuration for process")
 	}
 
-	logrus.Infof("in initProcess.start() step b; sleeping 30sec") // fails here
+	logrus.Infof("Apply after") // fails here
 	time.Sleep(time.Second * 30)
 
 	if p.intelRdtManager != nil {

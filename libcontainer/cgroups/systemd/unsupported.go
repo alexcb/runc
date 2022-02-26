@@ -7,6 +7,7 @@ import (
 
 	"github.com/opencontainers/runc/libcontainer/cgroups"
 	"github.com/opencontainers/runc/libcontainer/configs"
+	"github.com/sirupsen/logrus"
 )
 
 type Manager struct {
@@ -23,6 +24,7 @@ func NewSystemdCgroupsManager() (func(config *configs.Cgroup, paths map[string]s
 }
 
 func (m *Manager) Apply(pid int) error {
+	logrus.Info("unsupported.Apply")
 	return errors.New("Systemd not supported")
 }
 
