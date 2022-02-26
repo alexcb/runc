@@ -228,6 +228,7 @@ func genV2ResourcesProperties(r *configs.Resources, cm *dbusConnManager) ([]syst
 }
 
 func (m *unifiedManager) Apply(pid int) error {
+	logrus.Info("ACB unifiedManager.Apply called\n")
 	var (
 		c          = m.cgroups
 		unitName   = getUnitName(c)

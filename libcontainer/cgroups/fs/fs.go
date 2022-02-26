@@ -13,6 +13,7 @@ import (
 	"github.com/opencontainers/runc/libcontainer/configs"
 	libcontainerUtils "github.com/opencontainers/runc/libcontainer/utils"
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 	"golang.org/x/sys/unix"
 )
 
@@ -186,6 +187,7 @@ func isIgnorableError(rootless bool, err error) bool {
 }
 
 func (m *manager) Apply(pid int) (err error) {
+	logrus.Info("ACB fs.Apply called\n")
 	if m.cgroups == nil {
 		return nil
 	}

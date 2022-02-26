@@ -328,8 +328,8 @@ func (p *initProcess) waitForChildExit(childPid int) error {
 }
 
 func (p *initProcess) start() (retErr error) {
-	logrus.Infof("in initProcess.start(); sleeping 30sec") // works here
-	time.Sleep(time.Second * 30)
+	//logrus.Infof("in initProcess.start(); sleeping 30sec") // works here
+	//time.Sleep(time.Second * 30)
 	defer p.messageSockPair.parent.Close() //nolint: errcheck
 	err := p.cmd.Start()
 	p.process.ops = p
@@ -341,8 +341,8 @@ func (p *initProcess) start() (retErr error) {
 		return newSystemErrorWithCause(err, "starting init process command")
 	}
 
-	logrus.Infof("in initProcess.start() step 2; sleeping 30sec")
-	time.Sleep(time.Second * 30)
+	//logrus.Infof("in initProcess.start() step 2; sleeping 30sec") // works here
+	//time.Sleep(time.Second * 30)
 
 	waitInit := initWaiter(p.messageSockPair.parent)
 	defer func() {
@@ -384,6 +384,9 @@ func (p *initProcess) start() (retErr error) {
 		}
 	}()
 
+	logrus.Infof("in initProcess.start() step a; sleeping 30sec") // works here
+	time.Sleep(time.Second * 30)
+
 	// Do this before syncing with child so that no children can escape the
 	// cgroup. We don't need to worry about not doing this and not being root
 	// because we'd be using the rootless cgroup manager in that case.
@@ -391,7 +394,7 @@ func (p *initProcess) start() (retErr error) {
 		return newSystemErrorWithCause(err, "applying cgroup configuration for process")
 	}
 
-	logrus.Infof("in initProcess.start() step 3; sleeping 30sec")
+	logrus.Infof("in initProcess.start() step b; sleeping 30sec") // fails here
 	time.Sleep(time.Second * 30)
 
 	if p.intelRdtManager != nil {

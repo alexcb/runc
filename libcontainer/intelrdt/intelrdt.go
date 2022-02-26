@@ -16,6 +16,7 @@ import (
 
 	"github.com/moby/sys/mountinfo"
 	"github.com/opencontainers/runc/libcontainer/configs"
+	"github.com/sirupsen/logrus"
 )
 
 /*
@@ -558,6 +559,7 @@ func GetIntelRdtPath(id string) (string, error) {
 
 // Applies Intel RDT configuration to the process with the specified pid
 func (m *intelRdtManager) Apply(pid int) (err error) {
+	logrus.Info("ACB intelrdt.Apply called\n")
 	// If intelRdt is not specified in config, we do nothing
 	if m.config.IntelRdt == nil {
 		return nil

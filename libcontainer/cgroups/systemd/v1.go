@@ -101,6 +101,7 @@ func genV1ResourcesProperties(r *configs.Resources, cm *dbusConnManager) ([]syst
 }
 
 func (m *legacyManager) Apply(pid int) error {
+	logrus.Info("ACB legacyManager.Apply called\n")
 	var (
 		c          = m.cgroups
 		unitName   = getUnitName(c)

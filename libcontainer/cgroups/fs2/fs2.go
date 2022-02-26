@@ -11,6 +11,7 @@ import (
 	"github.com/opencontainers/runc/libcontainer/cgroups/fscommon"
 	"github.com/opencontainers/runc/libcontainer/configs"
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 )
 
 type manager struct {
@@ -68,6 +69,7 @@ func (m *manager) getControllers() error {
 }
 
 func (m *manager) Apply(pid int) error {
+	logrus.Info("ACB fs2.Apply called\n")
 	if err := CreateCgroupPath(m.dirPath, m.config); err != nil {
 		// Related tests:
 		// - "runc create (no limits + no cgrouppath + no permission) succeeds"
