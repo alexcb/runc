@@ -113,11 +113,9 @@ func CreateCgroupPath(path string, c *configs.Cgroup) (Err error) {
 				}()
 			}
 
-			logrus.Infof("ACB mkdir %s (before)", current)
-			time.Sleep(time.Second * 30)
-
 			cgType, _ := cgroups.ReadFile(current, cgTypeFile)
 			cgType = strings.TrimSpace(cgType)
+			logrus.Infof("ACB got cgType %s", cgType)
 			switch cgType {
 			// If the cgroup is in an invalid mode (usually this means there's an internal
 			// process in the cgroup tree, because we created a cgroup under an
@@ -144,19 +142,31 @@ func CreateCgroupPath(path string, c *configs.Cgroup) (Err error) {
 					return fmt.Errorf("cannot enter cgroupv2 %q with domain controllers -- it is in %s mode", current, cgType)
 				}
 			}
+
+			logrus.Infof("ACB waiting here 1")
+			time.Sleep(time.Second * 10)
+
 		}
 		// enable all supported controllers
 		if i < len(elements)-1 {
+			logrus.Infof("ACB writing %s %s %s (before)", current, cgStCtlFile, res)
+			time.Sleep(time.Second * 10)
 			if err := cgroups.WriteFile(current, cgStCtlFile, res); err != nil {
+				logrus.Infof("ACB writing failed %v", err)
 				// try write one by one
 				allCtrs := strings.Split(res, " ")
 				for _, ctr := range allCtrs {
+					logrus.Infof("ACB writing %s %s %s (before)", current, cgStCtlFile, ctr)
+					time.Sleep(time.Second * 10)
 					_ = cgroups.WriteFile(current, cgStCtlFile, ctr)
+					logrus.Infof("ACB writing %s %s %s (after)", current, cgStCtlFile, ctr)
+					time.Sleep(time.Second * 10)
 				}
 			}
 			// Some controllers might not be enabled when rootless or containerized,
 			// but we don't catch the error here. (Caught in setXXX() functions.)
 		}
+		logrus.Infof("loop end")
 	}
 
 	return nil
